@@ -36,7 +36,7 @@ void printAll(node* h){
     cout<<endl;
     cout<<"--------PRINTING LIST----------"<<endl;
     printList(h);
-    cout<<"--------END OF PRINT----------"<<endl<<endl;
+    cout<<"---------END OF PRINT----------"<<endl<<endl;
 }
 
 void pushBack(node** h,node* newP){
@@ -303,7 +303,6 @@ void mergeSort_list(){
         pLast = p;
     }
 
-    cout<<endl;
     while(iLast>0){
         int i=-2;
         while(i<iLast-1){
