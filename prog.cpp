@@ -3,7 +3,7 @@
 //#define COUNT_BUCKET_SORT
 //#define QUICK_SORT
 //#define MERGE_SORT
-#define COCTAIL_SORT
+#define COCKTAIL_SORT
 #include<iostream>
 #define MAX_LEN 16 
 #define M 10
@@ -437,8 +437,8 @@ int main(){
     mergeSort_list();
     #endif
 
-    #ifdef COCTAIL_SORT
-    cout<<"PERFORMING COCTAILSORT"<<endl;
+    #ifdef COCKTAIL_SORT
+    cout<<"PERFORMING COCKTAILSORT"<<endl;
     cocktailSort();
     #endif
     //printing
