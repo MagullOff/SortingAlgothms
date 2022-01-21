@@ -1,8 +1,9 @@
 //#define SELECTION_SORT
 //#define INSERTION_SORT
 //#define COUNT_BUCKET_SORT
-#define QUICK_SORT
+//#define QUICK_SORT
 //#define MERGE_SORT
+#define COCTAIL_SORT
 #include<iostream>
 #define MAX_LEN 16 
 #define M 10
@@ -56,6 +57,30 @@ void pushBack(node** h,node* newP){
     while(p->next)
         p = p->next;
     p->next = newP;
+}
+#pragma endregion
+
+#pragma region COCKTAIL_SORT
+void cocktailSort(){
+    int l=0;
+    int r=MAX_LEN-2;
+    int k=1;
+    do{
+        for(int i=l;i<=r;i++){
+            if(A[i]>A[i+1]){
+                swap(A[i],A[i+1]);
+                k=i;
+            }
+        }
+        r = k-1;
+        for(int i=r;i>=l;i--){
+            if(A[i]>A[i+1]){
+                swap(A[i],A[i+1]);
+                k=i;
+            }
+        }
+        l = k+1;
+    } while(l<=r);
 }
 #pragma endregion
 
@@ -410,6 +435,11 @@ int main(){
     cout<<"PERFORMING MERGESORT"<<endl;
     mergeSort_tab();
     mergeSort_list();
+    #endif
+
+    #ifdef COCTAIL_SORT
+    cout<<"PERFORMING COCTAILSORT"<<endl;
+    cocktailSort();
     #endif
     //printing
     printAll(head);
