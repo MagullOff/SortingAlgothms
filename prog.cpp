@@ -2,10 +2,11 @@
 //#define SELECTION_SORT
 //#define INSERTION_SORT
 //#define COUNT_BUCKET_SORT
-//#define QUICK_SORT
+#define QUICK_SORT
 //#define MERGE_SORT
 //#define COCKTAIL_SORT
 #include<iostream>
+#include<stdio.h>
 #define MAX_LEN 16 
 #define M 10
 using namespace std;
@@ -14,6 +15,7 @@ using namespace std;
 class node {
 public:
     int val;
+    int index;
     node* next;
     node(int val = 0, node* next = nullptr) : val(val), next(next) {}
 };
@@ -24,7 +26,13 @@ int A[MAX_LEN] = { 5,2,4,1,9,6,4,0,6,1,7,8,9,3,4,9 };
 void printList(node* h) {
     node* p = h;
     while (p != nullptr) {
-        cout << p->val << " ";
+        printf("%2d ",p->val);
+        p = p->next;
+    }
+    p = h;
+    cout<<endl;
+    while (p != nullptr) {
+        printf("%2d ",p->index);
         p = p->next;
     }
     cout << endl;
@@ -249,7 +257,55 @@ void quickSort_tab(int low = 0, int high = MAX_LEN - 1) {
     }
 }
 
-void quickSort_list(node*& h, node*& t) {
+void quickSortAntiStable_list(node*& h, node*& t) {
+    if (!h || !t || h->next == nullptr) return;
+    int pivot = h->val;
+    node* headM = nullptr;
+    node* tailM = nullptr;
+    node* headW = nullptr;
+    node* tailW = nullptr;
+    node* headR = nullptr;
+    node* tailR = nullptr;
+
+    while (h) {
+        node* p = h;
+        h = h->next;
+        p->next = nullptr;
+
+        if (p->val < pivot) {
+            tailM == nullptr ? headM = p : tailM->next = p;
+            tailM = p;
+        }
+        if (p->val > pivot) {
+            tailW == nullptr ? headW = p : tailW->next = p;
+            tailW = p;
+        }
+        if (p->val == pivot) {
+            if(!tailR) headR = tailR = p;
+            else{
+                p->next = headR;
+                headR = p;
+            }
+        }
+    }
+
+    quickSortAntiStable_list(headM, tailM);
+    quickSortAntiStable_list(headW, tailW);
+
+    if (headM) {
+        h = headM;
+        tailM->next = headR;
+    }
+    else h = headR;
+
+    if (tailW) {
+        t = tailW;
+        tailR->next = headW;
+    }
+    else t = tailR;
+}
+
+void quickSortStable_list(node*& h, node*& t) {
     if (!h || !t || h->next == nullptr) return;
     int pivot = h->val;
     node* headM = nullptr;
@@ -278,8 +334,8 @@ void quickSort_list(node*& h, node*& t) {
         }
     }
 
-    quickSort_list(headM, tailM);
-    quickSort_list(headW, tailW);
+    quickSortStable_list(headM, tailM);
+    quickSortStable_list(headW, tailW);
 
     if (headM) {
         h = headM;
@@ -389,6 +445,17 @@ void mergeSort_list() {
     }
     head = sArr[0];
 }
+
+void mergeSortNR_tab(){
+    int step = 1;
+    while(step<MAX_LEN){
+        for(int i=0;i<MAX_LEN;i+=2*step){
+            merge_tab(i,i+step-1,i+2*step-1);
+        }
+        step*=2;
+    }
+}
+
 #pragma endregion
 
 #pragma region MAIN
@@ -398,6 +465,7 @@ int main() {
     cout << "ORIGINAL STATE" << endl;
     for (int i = 0; i < MAX_LEN; i++) {
         node* p = new node(A[i], nullptr);
+        p->index = i;
         pushBack(&head, p);
         if (i == MAX_LEN - 1) tail = p;
     }
@@ -430,12 +498,13 @@ int main() {
 #ifdef QUICK_SORT
     cout << "PERFORMING QUICKSORT" << endl;
     quickSort_tab();
-    quickSort_list(head, tail);
+    //quickSortStable_list(head,tail);
+    quickSortAntiStable_list(head, tail);
 #endif
 
 #ifdef MERGE_SORT
     cout << "PERFORMING MERGESORT" << endl;
-    mergeSort_tab();
+    mergeSortNR_tab();
     mergeSort_list();
 #endif
 
